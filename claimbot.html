@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>recorder</title>
+
+    <style type="text/css">
+      /*--------------------
+      Mixins
+      --------------------*/
+      /*--------------------
+      Body
+      --------------------*/
+      *,
+      *::before,
+      *::after {
+        -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+      }
+
+      body {
+        background: linear-gradient(135deg, #044f48, #2a7561);
+        background-size: cover;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 18px;
+        line-height: 1.3;
+        overflow: hidden;
+      }
+
+      .bg {
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        background: url("https://images.unsplash.com/photo-1451186859696-371d9477be93?crop=entropy&fit=crop&fm=jpg&h=975&ixjsv=2.1.0&ixlib=rb-0.3.5&q=80&w=1925") no-repeat 0 0;
+        -webkit-filter: blur(80px);
+                filter: blur(80px);
+        -webkit-transform: scale(1.2);
+                transform: scale(1.2);
+      }
+
+      /*--------------------
+      Chat
+      --------------------*/
+      .chat {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100vh;
+        /*max-height: 500px;*/
+        z-index: 2;
+        overflow: hidden;
+        -webkit-box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+                box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+        background: rgba(0, 0, 0, 0.5);
+        /*border-radius: 20px;*/
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+                justify-content: space-between;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+                flex-direction: column;
+      }
+
+      /*--------------------
+      Chat Title
+      --------------------*/
+      .chat-title {
+        -webkit-box-flex: 0;
+            -ms-flex: 0 1 45px;
+                flex: 0 1 45px;
+        position: relative;
+        z-index: 2;
+        background: rgba(0, 0, 0, 0.2);
+        color: #fff;
+        text-transform: uppercase;
+        text-align: left;
+        padding: 10px 10px 10px 50px;
+      }
+      .chat-title h1, .chat-title h2 {
+        font-weight: normal;
+        font-size: 20px;
+        margin: 0;
+        padding: 0;
+      }
+      .chat-title h2 {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 16px;
+        letter-spacing: 1px;
+      }
+      .chat-title .avatar {
+        position: absolute;
+        z-index: 1;
+        top: 8px;
+        left: 9px;
+        border-radius: 30px;
+        width: 30px;
+        height: 30px;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+        border: 2px solid rgba(255, 255, 255, 0.24);
+      }
+      .chat-title .avatar img {
+        width: 100%;
+        height: 50px;
+      }
+
+      /*--------------------
+      Messages
+      --------------------*/
+      .messages {
+        -webkit-box-flex: 1;
+            -ms-flex: 1 1 auto;
+                flex: 1 1 auto;
+        color: rgba(255, 255, 255, 0.5);
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+      }
+      .messages .messages-content {
+        overflow: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 101%;
+        width: 100%;
+      }
+      .messages .message {
+        clear: both;
+        float: left;
+        padding: 6px 10px 7px;
+        border-radius: 10px 10px 10px 0;
+        background: rgba(0, 0, 0, 0.3);
+        margin: 8px 0;
+        font-size: 32px;
+        line-height: 1.4;
+        margin-left: 35px;
+        position: relative;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+      }
+      .messages .message .timestamp {
+        position: absolute;
+        bottom: -30px;
+        font-size: 20px;
+        color: rgba(255, 255, 255, 0.3);
+      }
+      .messages .message::before {
+        content: '';
+        position: absolute;
+        bottom: -6px;
+        border-top: 6px solid rgba(0, 0, 0, 0.3);
+        left: 0;
+        border-right: 7px solid transparent;
+      }
+      .messages .message .avatar {
+        position: absolute;
+        z-index: 1;
+        bottom: -15px;
+        left: -35px;
+        border-radius: 30px;
+        width: 30px;
+        height: 30px;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+        border: 2px solid rgba(255, 255, 255, 0.24);
+      }
+      .messages .message .avatar img {
+        width: 100%;
+        height: auto;
+      }
+      .messages .message.message-personal {
+        float: right;
+        color: #fff;
+        text-align: right;
+        background: linear-gradient(120deg, #248A52, #257287);
+        border-radius: 10px 10px 0 10px;
+      }
+      .messages .message.message-personal::before {
+        left: auto;
+        right: 0;
+        border-right: none;
+        border-left: 5px solid transparent;
+        border-top: 4px solid #257287;
+        bottom: -4px;
+      }
+      .messages .message:last-child {
+        margin-bottom: 30px;
+      }
+      .messages .message.new {
+        -webkit-transform: scale(0);
+                transform: scale(0);
+        -webkit-transform-origin: 0 0;
+                transform-origin: 0 0;
+        -webkit-animation: bounce 500ms linear both;
+                animation: bounce 500ms linear both;
+      }
+      .messages .message.loading::before {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+        content: '';
+        display: block;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        z-index: 2;
+        margin-top: 4px;
+        -webkit-animation: ball 0.45s cubic-bezier(0, 0, 0.15, 1) alternate infinite;
+                animation: ball 0.45s cubic-bezier(0, 0, 0.15, 1) alternate infinite;
+        border: none;
+        -webkit-animation-delay: .15s;
+                animation-delay: .15s;
+      }
+      .messages .message.loading span {
+        display: block;
+        font-size: 0;
+        width: 20px;
+        height: 10px;
+        position: relative;
+      }
+      .messages .message.loading span::before {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+        content: '';
+        display: block;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        z-index: 2;
+        margin-top: 4px;
+        -webkit-animation: ball 0.45s cubic-bezier(0, 0, 0.15, 1) alternate infinite;
+                animation: ball 0.45s cubic-bezier(0, 0, 0.15, 1) alternate infinite;
+        margin-left: -7px;
+      }
+      .messages .message.loading span::after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+        content: '';
+        display: block;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        z-index: 2;
+        margin-top: 4px;
+        -webkit-animation: ball 0.45s cubic-bezier(0, 0, 0.15, 1) alternate infinite;
+                animation: ball 0.45s cubic-bezier(0, 0, 0.15, 1) alternate infinite;
+        margin-left: 7px;
+        -webkit-animation-delay: .3s;
+                animation-delay: .3s;
+      }
+
+      /*--------------------
+      Message Box
+      --------------------*/
+      .message-box {
+        -webkit-box-flex: 0;
+            -ms-flex: 0 1 40px;
+                flex: 0 1 40px;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 10px;
+        position: relative;
+      }
+      .message-box .message-input {
+        background: none;
+        border: none;
+        outline: none !important;
+        resize: none;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 28px;
+        height: 50px;
+        margin: 0;
+        padding-right: 20px;
+        width: 630px;
+      }
+      .message-box textarea:focus:-webkit-placeholder {
+        color: transparent;
+      }
+/*      .message-box .message-submit {
+        position: absolute;
+        z-index: 1;
+        top: 2px;
+        right: 10px;
+        color: #fff;
+        border: none;
+        background: #248A52;
+        font-size: 14px;
+        text-transform: uppercase;
+        line-height: 5;
+        padding: 0px 30px;
+        border-radius: 0px;
+        outline: none !important;
+        -webkit-transition: background .2s ease;
+        transition: background .2s ease;
+      }*/
+      .message-box .message-submit {
+        position: fixed;
+        z-index: 1;
+        top: 952px;
+        right: 160px;
+        color: #fff;
+        border: none;
+        background: #248A52;
+        font-size: 14px;
+        text-transform: uppercase;
+        line-height: 5;
+        padding: 3px 10px;
+        border-radius: 5px;
+        outline: none !important;
+        -webkit-transition: background .2s ease;
+        transition: background .2s ease;
+      }
+      .message-submit2 {
+        position: fixed;
+        z-index: 1;
+        top: 952px;
+        right: 80px;
+        color: #fff;
+        border: none;
+        background: #248A52;
+        font-size: 14px;
+        text-transform: uppercase;
+        line-height: 5;
+        padding: 3px 10px;
+        border-radius: 5px;
+        outline: none !important;
+        -webkit-transition: background .2s ease;
+        transition: background .2s ease;
+      }
+      .message-submit3 {
+        position: fixed;
+        z-index: 1;
+        top: 952px;
+        right: 0px;
+        color: #fff;
+        border: none;
+        background: #248A52;
+        font-size: 14px;
+        text-transform: uppercase;
+        line-height: 5;
+        padding: 3px 10px;
+        border-radius: 5px;
+        outline: none !important;
+        -webkit-transition: background .2s ease;
+        transition: background .2s ease;
+      }
+      .message-submit3.active {
+        background-color: red;
+      }
+
+      .message-box .message-submit:hover {
+        background: #1D7745;
+      }
+
+      /*--------------------
+      Custom Srollbar
+      --------------------*/
+      .mCSB_scrollTools {
+        margin: 1px -3px 1px 0;
+        opacity: 0;
+      }
+
+      .mCSB_inside > .mCSB_container {
+        margin-right: 0px;
+        padding: 0 10px;
+      }
+
+      .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+        background-color: rgba(0, 0, 0, 0.5) !important;
+      }
+
+      /*--------------------
+      Bounce
+      --------------------*/
+      @-webkit-keyframes bounce {
+        0% {
+          -webkit-transform: matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        4.7% {
+          -webkit-transform: matrix3d(0.45, 0, 0, 0, 0, 0.45, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(0.45, 0, 0, 0, 0, 0.45, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        9.41% {
+          -webkit-transform: matrix3d(0.883, 0, 0, 0, 0, 0.883, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(0.883, 0, 0, 0, 0, 0.883, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        14.11% {
+          -webkit-transform: matrix3d(1.141, 0, 0, 0, 0, 1.141, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(1.141, 0, 0, 0, 0, 1.141, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        18.72% {
+          -webkit-transform: matrix3d(1.212, 0, 0, 0, 0, 1.212, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(1.212, 0, 0, 0, 0, 1.212, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        24.32% {
+          -webkit-transform: matrix3d(1.151, 0, 0, 0, 0, 1.151, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(1.151, 0, 0, 0, 0, 1.151, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        29.93% {
+          -webkit-transform: matrix3d(1.048, 0, 0, 0, 0, 1.048, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(1.048, 0, 0, 0, 0, 1.048, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        35.54% {
+          -webkit-transform: matrix3d(0.979, 0, 0, 0, 0, 0.979, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(0.979, 0, 0, 0, 0, 0.979, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        41.04% {
+          -webkit-transform: matrix3d(0.961, 0, 0, 0, 0, 0.961, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(0.961, 0, 0, 0, 0, 0.961, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        52.15% {
+          -webkit-transform: matrix3d(0.991, 0, 0, 0, 0, 0.991, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(0.991, 0, 0, 0, 0, 0.991, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        63.26% {
+          -webkit-transform: matrix3d(1.007, 0, 0, 0, 0, 1.007, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(1.007, 0, 0, 0, 0, 1.007, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        85.49% {
+          -webkit-transform: matrix3d(0.999, 0, 0, 0, 0, 0.999, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(0.999, 0, 0, 0, 0, 0.999, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        100% {
+          -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+      }
+      @keyframes bounce {
+        0% {
+          -webkit-transform: matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        4.7% {
+          -webkit-transform: matrix3d(0.45, 0, 0, 0, 0, 0.45, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(0.45, 0, 0, 0, 0, 0.45, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        9.41% {
+          -webkit-transform: matrix3d(0.883, 0, 0, 0, 0, 0.883, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(0.883, 0, 0, 0, 0, 0.883, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        14.11% {
+          -webkit-transform: matrix3d(1.141, 0, 0, 0, 0, 1.141, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(1.141, 0, 0, 0, 0, 1.141, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        18.72% {
+          -webkit-transform: matrix3d(1.212, 0, 0, 0, 0, 1.212, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(1.212, 0, 0, 0, 0, 1.212, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        24.32% {
+          -webkit-transform: matrix3d(1.151, 0, 0, 0, 0, 1.151, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(1.151, 0, 0, 0, 0, 1.151, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        29.93% {
+          -webkit-transform: matrix3d(1.048, 0, 0, 0, 0, 1.048, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(1.048, 0, 0, 0, 0, 1.048, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        35.54% {
+          -webkit-transform: matrix3d(0.979, 0, 0, 0, 0, 0.979, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(0.979, 0, 0, 0, 0, 0.979, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        41.04% {
+          -webkit-transform: matrix3d(0.961, 0, 0, 0, 0, 0.961, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(0.961, 0, 0, 0, 0, 0.961, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        52.15% {
+          -webkit-transform: matrix3d(0.991, 0, 0, 0, 0, 0.991, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(0.991, 0, 0, 0, 0, 0.991, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        63.26% {
+          -webkit-transform: matrix3d(1.007, 0, 0, 0, 0, 1.007, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(1.007, 0, 0, 0, 0, 1.007, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        85.49% {
+          -webkit-transform: matrix3d(0.999, 0, 0, 0, 0, 0.999, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(0.999, 0, 0, 0, 0, 0.999, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        100% {
+          -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+                  transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+      }
+      @-webkit-keyframes ball {
+        from {
+          -webkit-transform: translateY(0) scaleY(0.8);
+                  transform: translateY(0) scaleY(0.8);
+        }
+        to {
+          -webkit-transform: translateY(-10px);
+                  transform: translateY(-10px);
+        }
+      }
+      @keyframes ball {
+        from {
+          -webkit-transform: translateY(0) scaleY(0.8);
+                  transform: translateY(0) scaleY(0.8);
+        }
+        to {
+          -webkit-transform: translateY(-10px);
+                  transform: translateY(-10px);
+        }
+      }   
+    </style>
+
+  </head>
+
+  <body>
+    <!-- <div id="app"></div> -->
+
+    <div class="chat">
+      <div class="chat-title">
+        <h1>Claimbot</h1>
+        <h2>Your perosnal assistant</h2>
+        <figure class="avatar">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg" /></figure>
+      </div>
+      <div class="messages">
+        <div class="messages-content"></div>
+      </div>
+      <div class="message-box">
+        <textarea type="text" class="message-input" placeholder="Type message..."></textarea>
+        <button type="submit" class="message-submit">Send</button>
+        <button type="file" class="message-submit2" 
+                onclick="document.getElementById('file-input').click();">Camera</button> 
+        <button type="file" class="message-submit3" >Record</button> 
+        <input id="file-input" type="file" name="name" style="display: none;" />        
+      </div>
+
+    </div>
+
+    <div class="bg"></div>
+
+
+    <!-- built files will be auto injected -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.3/jquery.mCustomScrollbar.concat.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
+
+
+<script type="text/javascript">
+
+    var state = 1
+
+    var $messages = $('.messages-content'),
+        d, h, m,
+        i = 0,
+        recording = false,
+        previousContext = null;
+
+    $(window).load(function() {
+      $messages.mCustomScrollbar();
+      setTimeout(function() {
+        // defaultMessage();
+
+        // insertMessage()
+        // sendMessage()
+        // insertMessage('I’ve faced a declined transaction while purchasing a Rolex watch. NOW, I want to know why?')
+        // sendMessage(' I’m so sorry to hear that. I will do my best to assist you')
+        // sendMessage('I noticed that you do not have enough limit to complete the purchase and I’m happy to offer you a temporary limit to complete the purchase')
+
+        // insertMessage('Thank you for the exceptional service')
+        // sendMessage('Always a pleasure to be of  service. Have a wonderful day!')
+
+
+      }, 100);
+    });
+
+    function updateScrollbar() {
+      $messages.mCustomScrollbar("update").mCustomScrollbar('scrollTo', 'bottom', {
+        scrollInertia: 10,
+        timeout: 0
+      });
+    }
+
+    function setDate() {
+      d = new Date()
+      if (m != d.getMinutes()) {
+        m = d.getMinutes();
+        $('<div class="timestamp">' + d.getHours() + ':' + m + '</div>').appendTo($('.message:last'));
+      }
+    }
+
+    function insertMessage(passMsg) {
+      var msg = $('.message-input').val() || passMsg;
+      if ($.trim(msg) == '') {
+        return false;
+      }
+      $('<div class="message message-personal">' + msg + '</div>').appendTo($('.mCSB_container')).addClass('new');
+      setDate();
+      $('.message-input').val(null);
+      updateScrollbar();
+      setTimeout(function() {
+        // fakeMessage();
+        // apiMessage(msg)
+      }, 0);
+
+      updateState();
+    }
+
+    function updateState() {
+      switch (state) {
+        case 1: 
+          window.setTimeout(function() {sendMessage("Is everyone in the vehichle OK?")}, 800)
+          break;
+        case 2:
+          window.setTimeout(function() {sendMessage("Please send a picture/video of the car")}, 800)
+          break;
+        case 3:
+          window.setTimeout(function() {sendMessage("Please describe the incident")}, 800)
+          break;
+        // case 4:
+        //   break;
+        case 4:
+          // insertMessage("<img src='voiceclip.png'></img>")
+          insertMessage("sadfas")
+          break;
+        case 5:
+          window.setTimeout(function() {sendMessage("Thank you! Your claim is being processed")}, 800)          
+          break;       
+        default:
+          break;
+      }
+      state++
+    }
+
+    $('.message-submit').click(function() {
+      insertMessage();
+    });
+
+
+
+    $('#file-input').change(function(e) {
+      // alert('safa')
+      insertMessage("<img src='accident.jpg' width='80%'></img>")
+    });
+
+    $(".message-submit3").click(function(e) {
+      e.preventDefault()
+
+      $(".message-submit3").toggleClass('active')
+      updateState()
+    })
+
+    // $(".message-submit3").mouseup(function() {
+    //   $(".message-submit3").removeClass('active')
+    // })
+    $('passive').disabled = false;
+
+    $(window).on('keydown', function(e) {
+      if (e.which == 13) {
+        insertMessage();
+        return false;
+      }
+    })
+
+    var Fake = [
+      'Hi there, I\'m Fabio and you?',
+      'Nice to meet you',
+      'How are you?',
+      'Not too bad, thanks',
+      'What do you do?',
+      'That\'s awesome',
+      'Codepen is a nice place to stay',
+      'I think you\'re a nice person',
+      'Why do you think that?',
+      'Can you explain?',
+      'Anyway I\'ve gotta go now',
+      'It was a pleasure chat with you',
+      'Time to make a new codepen',
+      'Bye',
+      ':)'
+    ]
+
+    function sendMessage (msg) {
+
+      $('<div class="message loading new"><figure class="avatar"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg" /></figure><span></span></div>').appendTo($('.mCSB_container'));
+      updateScrollbar();
+
+      // setTimeout(function() {
+        $('.message.loading').remove();
+        $('<div class="message new"><figure class="avatar"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg" /></figure>' + msg + '</div>').appendTo($('.mCSB_container')).addClass('new');
+        setDate();
+        updateScrollbar();
+        i++;
+      // }, 00 + (Math.random() * 20) * 0);
+    }
+
+    function defaultMessage () {
+      var introMsg = "Hi there! I'm your personal assistant bot, here are your options: Book an airline ticket, request a limit increase, or report an issue with your card. Just ask me!" 
+      sendMessage(introMsg)
+  
+        var speach = new SpeechSynthesisUtterance(introMsg);
+        window.speechSynthesis.speak(speach);
+
+    }
+
+    function apiMessage (sendMsg) {
+      var msg = $('.message-input').val() || sendMsg
+      $.ajax({
+        type: "POST",
+        url: 'http://localhost:3000/api/message',
+        data: JSON.stringify({
+          input: {'text': msg},
+          context: previousContext || {}
+        }),
+        contentType: 'application/json',
+        dataType: "json",
+      }).done(function (res) {
+        console.log(res)
+        sendMessage(res.output.text)
+        var speach = new SpeechSynthesisUtterance(res.output.text);
+        window.speechSynthesis.speak(speach);
+        previousContext = res.context
+      })
+
+    }
+
+    function fakeMessage() {
+      if ($('.message-input').val() != '') {
+        return false;
+      }
+      sendMessage(Fake[i])
+      i++
+    }
+
+
+</script>
+
+
+
+  </body>
+</html>
