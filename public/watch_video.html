@@ -147,7 +147,7 @@
               <div class="box-body">
                     <div class="col-xs-12">
                         <div class="select">
-                            <label for="audioSource">permission access audio source: </label><select id=""><option value="mom">Mom</option></select>
+                            <label for="audioSource">permission access audio source: </label><select id=""><option value="passenger">passenger</option></select>
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -504,7 +504,7 @@ function startVideo() {
     var stream = evt.stream;
     console.log("Subscribe remote stream successfully: " + stream.getId());
     if ($('div#video #agora_remote'+stream.getId()).length === 0) {
-      $('div#video').append('<div id="agora_remote'+stream.getId()+'" style="float:left; width:810px;height:607px;display:inline-block;"></div>');
+      $('div#video').append('<div id="agora_remote'+stream.getId()+'" style="float:left; width:100%;height:50px;display:inline-block;"></div>');
     }
     stream.play('agora_remote' + stream.getId());
   });
