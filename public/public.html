@@ -6,6 +6,7 @@
   <title>I-Click | Items</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <script src="./AgoraRTCSDK-2.3.1.js"></script>
   <!-- Bootstrap 3.3.7 -->
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   <!-- Font Awesome -->
@@ -37,7 +38,8 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-<div class="wrapper">
+  <input id="video" type="checkbox" checked hidden></input>
+  <div class="wrapper">
 
   <header class="main-header">
     <!-- Logo -->
@@ -113,13 +115,13 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree" id="">
         <li class="active treeview">
-          <a href="/public.html">
+          <a href="#">
             <i class="fa fa-pie-chart"></i>
             <span>Public</span>
           </a>
         </li>
         <li class="treeview">
-          <a href="#">
+          <a href="./watch.html">
             <i class="fa fa-pie-chart"></i>
             <span>Watch</span>
           </a>
@@ -139,27 +141,39 @@
     <section class="content">
       <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12">
-                <div class="box box-info">
-                <div class="box-header">
-                  <h3 class="box-title">We are I-Click</h3>
-                </div>
-                <div class="box-body">
-                <!-- Profile Image -->
-                <div class="card card-primary card-outline">
-                  <div class="card-body box-profile">
-                    <div class="text-center">
-                      <img class="profile-user-img"
-                          src="./dist/img/i-click.PNG"
-                          alt="User profile picture">
-                    </div>
-                  </div>
-                  <!-- /.card-body -->
-                </div>
-                </div>
-              <!-- /.card -->
+          <div class="col-md-12">
+            <div class="box box-success">
+              <div class="box-header">
+                <h3 class="box-title">Public Private Video</h3>
               </div>
+              <div class="box-body">
+                    <div class="col-xs-12">
+                        <div class="select">
+                        <label for="audioSource">Audio source: </label><select id="audioSource"></select>
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                      <div class="select">
+                      <label for="videoSource">Video source: </label><select id="videoSource"></select>
+                      </div>
+                    </div>
+                    <div class="col-md-5">
+                      </div>
+                      <div class="col-md-2">
+                          <button onclick="startVideo();" id="join" type="button" class="btn btn-block btn-success btn-lg">Start Video</button>
+                      </div>
+                      <div class="col-md-5">
+                    </div>  
+                    <div class="col-md-12">
+                        <div id="video" style="margin:0 auto;">
+                            <div id="agora_local" style="float:right;width:210px;height:147px;display:inline-block;"></div>
+                        </div>
+                    </div>
+                </div>
+              <!-- /.card-body -->
             </div>
+            <!-- /.card -->
+          </div>
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -362,8 +376,6 @@
 </div>
 <!-- ./wrapper -->
 
-
-<script src="./AgoraRTCSDK-2.3.1.js"></script>
 <!-- jQuery 3 -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
@@ -395,5 +407,185 @@
 <script src="bower_components/fastclick/lib/fastclick.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
+<script type="text/javascript">
+if(!AgoraRTC.checkSystemRequirements()) {
+  alert("browser is no support webRTC");
+}
+
+/* select Log type */
+// AgoraRTC.Logger.setLogLevel(AgoraRTC.Logger.NONE);
+// AgoraRTC.Logger.setLogLevel(AgoraRTC.Logger.ERROR);
+// AgoraRTC.Logger.setLogLevel(AgoraRTC.Logger.WARNING);
+// AgoraRTC.Logger.setLogLevel(AgoraRTC.Logger.INFO);  
+// AgoraRTC.Logger.setLogLevel(AgoraRTC.Logger.DEBUG);
+
+/* simulated data to proof setLogLevel() */
+// AgoraRTC.Logger.error('this is error');
+// AgoraRTC.Logger.warning('this is warning');
+// AgoraRTC.Logger.info('this is info');
+// AgoraRTC.Logger.debug('this is debug');
+
+var client, localStream, camera, microphone;
+
+var audioSelect = document.querySelector('select#audioSource');
+var videoSelect = document.querySelector('select#videoSource');
+
+const key = {};
+const channel = {};
+
+function startVideo() {
+  document.getElementById("join").disabled = true;
+  document.getElementById("video").disabled = true;
+  var channel_key = null;
+
+  // Hard Code: AppId
+  key.value = '575be5fb39fe485f9d8c534a2ca7eb5d';
+  channel.value = '1000';
+
+  console.log("Init AgoraRTC client with vendor key: " + key.value);
+  client = AgoraRTC.createClient({mode: 'interop'});
+  client.init(key.value, function () {
+    console.log("AgoraRTC client initialized");
+    client.join(channel_key, channel.value, null, function(uid) {
+
+      console.log("User " + uid + " join channel successfully");
+
+      if (true) {
+        camera = videoSource.value;
+        microphone = audioSource.value;
+        localStream = AgoraRTC.createStream({streamID: uid, audio: true, cameraId: camera, microphoneId: microphone, video: document.getElementById("video").checked, screen: false});
+        //localStream = AgoraRTC.createStream({streamID: uid, audio: false, cameraId: camera, microphoneId: microphone, video: false, screen: true, extensionId: 'minllpmhdgpndnkomcoccfekfegnlikg'});
+        if (document.getElementById("video").checked) {
+          localStream.setVideoProfile('720p_3');
+        }
+
+        // The user has granted access to the camera and mic.
+        localStream.on("accessAllowed", function() {
+          console.log("accessAllowed");
+        });
+
+        // The user has denied access to the camera and mic.
+        localStream.on("accessDenied", function() {
+          console.log("accessDenied");
+        });
+
+        localStream.init(function() {
+          console.log("getUserMedia successfully");
+          localStream.play('agora_local');
+
+          client.publish(localStream, function (err) {
+            console.log("Publish local stream error: " + err);
+          });
+
+          client.on('stream-published', function (evt) {
+            console.log("Publish local stream successfully");
+          });
+        }, function (err) {
+          console.log("getUserMedia failed", err);
+        });
+      }
+    }, function(err) {
+      console.log("Join channel failed", err);
+    });
+  }, function (err) {
+    console.log("AgoraRTC client init failed", err);
+  });
+
+  channelKey = "";
+  client.on('error', function(err) {
+    console.log("Got error msg:", err.reason);
+    if (err.reason === 'DYNAMIC_KEY_TIMEOUT') {
+      client.renewChannelKey(channelKey, function(){
+        console.log("Renew channel key successfully");
+      }, function(err){
+        console.log("Renew channel key failed: ", err);
+      });
+    }
+  });
+
+
+  client.on('stream-added', function (evt) {
+    var stream = evt.stream;
+    console.log("New stream added: " + stream.getId());
+    console.log("Subscribe ", stream);
+    client.subscribe(stream, function (err) {
+      console.log("Subscribe stream failed", err);
+    });
+  });
+
+  client.on('stream-subscribed', function (evt) {
+    var stream = evt.stream;
+    console.log("Subscribe remote stream successfully: " + stream.getId());
+    if ($('div#video #agora_remote'+stream.getId()).length === 0) {
+      $('div#video').append('<div id="agora_remote'+stream.getId()+'" style="float:left; width:810px;height:607px;display:inline-block;"></div>');
+    }
+    stream.play('agora_remote' + stream.getId());
+  });
+
+  client.on('stream-removed', function (evt) {
+    var stream = evt.stream;
+    stream.stop();
+    $('#agora_remote' + stream.getId()).remove();
+    console.log("Remote stream is removed " + stream.getId());
+  });
+
+  client.on('peer-leave', function (evt) {
+    var stream = evt.stream;
+    if (stream) {
+      stream.stop();
+      $('#agora_remote' + stream.getId()).remove();
+      console.log(evt.uid + " leaved from this channel");
+    }
+  });
+}
+
+function leave() {
+  document.getElementById("leave").disabled = true;
+  client.leave(function () {
+    console.log("Leavel channel successfully");
+  }, function (err) {
+    console.log("Leave channel failed");
+  });
+}
+
+function publish() {
+  document.getElementById("publish").disabled = true;
+  document.getElementById("unpublish").disabled = false;
+  client.publish(localStream, function (err) {
+    console.log("Publish local stream error: " + err);
+  });
+}
+
+function unpublish() {
+  document.getElementById("publish").disabled = false;
+  document.getElementById("unpublish").disabled = true;
+  client.unpublish(localStream, function (err) {
+    console.log("Unpublish local stream failed" + err);
+  });
+}
+
+function getDevices() {
+  AgoraRTC.getDevices(function (devices) {
+    for (var i = 0; i !== devices.length; ++i) {
+      var device = devices[i];
+      var option = document.createElement('option');
+      option.value = device.deviceId;
+      if (device.kind === 'audioinput') {
+        option.text = device.label || 'microphone ' + (audioSelect.length + 1);
+        audioSelect.appendChild(option);
+      } else if (device.kind === 'videoinput') {
+        option.text = device.label || 'camera ' + (videoSelect.length + 1);
+        videoSelect.appendChild(option);
+      } else {
+        console.log('Some other kind of source/device: ', device);
+      }
+    }
+  });
+}
+
+//audioSelect.onchange = getDevices;
+//videoSelect.onchange = getDevices;
+getDevices();
+</script>
 </body>
 </html>

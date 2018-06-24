@@ -134,7 +134,6 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        User Profile
       </h1>
     </section>
 
@@ -142,73 +141,60 @@
     <section class="content">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-md-3">
-              <div class="box box-info">
-              <div class="box-header">
-                <h3 class="box-title"></h3>
-              </div>
-              <div class="box-body">
-              <!-- Profile Image -->
-              <div class="card card-primary card-outline">
-                <div class="card-body box-profile">
-                  <div class="text-center">
-                    <img class="profile-user-img img-fluid img-circle"
-                        src="../../dist/img/user4-128x128.jpg"
-                        alt="User profile picture">
-                  </div>
-
-                  <h3 class="profile-username text-center">Nina Mcintire</h3>
-
-                  <p class="text-muted text-center">Age: 30 (Female
-                      <i class="fa fa-venus mr-1"></i>)</p>
-
-                </div>
-                <!-- /.card-body -->
-              </div>
-              </div>
-            <!-- /.card -->
-            </div>
-          </div>
           <div class="col-md-9">
             <div class="box box-success">
               <div class="box-header">
-                <h3 class="box-title">About User</h3>
+                <h3 class="box-title">Your journey is complated!</h3>
               </div>
               <div class="box-body">
-                <strong><i class="fa fa-history mr-1"></i> History of Claims</strong>
+                <strong><i class="fa fa-history mr-1"></i> States</strong>
 
                 <p class="text-muted">
-                  No Claim history
+                  Driving Style
+                  &nbsp&nbsp&nbsp&nbsp
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+
+                  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                  5.0
                 </p>
+                <p class="text-muted">
+                    Safety
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+  
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    5.0
+                  </p>
 
                 <hr>
 
                 
-                <strong><i class="fa fa-map-marker mr-1"></i> Driving Experiance</strong>
+                <strong><i class="fa fa-map-marker mr-1"></i> Congrats</strong>
 
-                <p class="text-muted">
-                  <span class="label label-success">Excellence<span>
+                <p class="text-muted">You earned &nbsp
+                  <span class="label label-success">100 points profiles </span>&nbsp and &nbsp
+                      <span class="label label-danger"> £2 discount</span>.
                 </p>
 
                 <hr>
 
-                <strong><i class="fa fa-money mr-1"></i> No Claim Bonus</strong>
+                <strong><i class="fa fa-money mr-1"></i> Final price</strong>
 
-                <p class="text-muted">7 years</p>
-
-                <hr>
-
-                <strong><i class="fa fa-medium mr-1"></i> Med Conditions</strong>
-
-                <p class="text-muted">
-                  <span class="label label-danger">Cataract</span>
-                <p class="text-muted">
+                <p class="text-muted">You earned &nbsp
+                    <span class="label label-warning"> £8 </span>
                 </p>
-                  <span class="label label-info">Diabetes type-1</span>
-                <p class="text-muted">
-                <hr>
 
-                <span class="label label-success" onclick="purchase();">Buy Insurance<span>
               </div>
               <!-- /.card-body -->
             </div>
@@ -416,49 +402,6 @@
 </div>
 <!-- ./wrapper -->
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
-<script type="text/babel">
-class Item extends React.Component {
-    render() {
-        return (
-          <li className= "treeview" >
-            <a href="#">
-              <i className='fa fa-dashboard'></i>
-              <span>{this.props.name}</span>
-            </a>
-          </li>
-        );
-    }
-}
-ReactDOM.render(
-      <div>
-        <li className="header">MAIN NAVIGATION</li>
-        <Item
-          active={'active'}
-          url={'#'}
-          icon={'fa fa-dashboard'}
-          name={'Index'}
-        >
-        </Item>
-        <Item
-          url={'#'}
-          icon={'fa fa-dashboard'}
-          name={'chat'}
-        >
-        </Item>
-        <Item
-          url={'#'}
-          icon={'fa fa-dashboard'}
-          name={'test'}
-        >
-        </Item>
-      </div>
-      ,
-      document.getElementById('navigation')
-    );
-</script>
 <script type="text/javascript">
   function postUrl() {
     let url = $('#urlInput').val();

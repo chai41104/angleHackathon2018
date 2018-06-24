@@ -113,15 +113,15 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree" id="">
         <li class="active treeview">
-          <a href="/public.html">
+          <a href="#">
             <i class="fa fa-pie-chart"></i>
-            <span>Public</span>
+            <span>Index</span>
           </a>
         </li>
         <li class="treeview">
           <a href="#">
             <i class="fa fa-pie-chart"></i>
-            <span>Watch</span>
+            <span>Chat</span>
           </a>
         </li>
       </ul>
@@ -133,33 +133,87 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
+      <h1>
+        User Profile
+      </h1>
     </section>
 
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12">
-                <div class="box box-info">
-                <div class="box-header">
-                  <h3 class="box-title">We are I-Click</h3>
-                </div>
-                <div class="box-body">
-                <!-- Profile Image -->
-                <div class="card card-primary card-outline">
-                  <div class="card-body box-profile">
-                    <div class="text-center">
-                      <img class="profile-user-img"
-                          src="./dist/img/i-click.PNG"
-                          alt="User profile picture">
-                    </div>
-                  </div>
-                  <!-- /.card-body -->
-                </div>
-                </div>
-              <!-- /.card -->
+          <div class="col-md-3">
+              <div class="box box-info">
+              <div class="box-header">
+                <h3 class="box-title"></h3>
               </div>
+              <div class="box-body">
+              <!-- Profile Image -->
+              <div class="card card-primary card-outline">
+                <div class="card-body box-profile">
+                  <div class="text-center">
+                    <img class="profile-user-img img-fluid img-circle"
+                        src="./dist/img/user4-128x128.jpg"
+                        alt="User profile picture">
+                  </div>
+
+                  <h3 class="profile-username text-center">Nina Mcintire</h3>
+
+                  <p class="text-muted text-center">Age: 30 (Female
+                      <i class="fa fa-venus mr-1"></i>)</p>
+
+                </div>
+                <!-- /.card-body -->
+              </div>
+              </div>
+            <!-- /.card -->
             </div>
+          </div>
+          <div class="col-md-9">
+            <div class="box box-success">
+              <div class="box-header">
+                <h3 class="box-title">About User</h3>
+              </div>
+              <div class="box-body">
+                <strong><i class="fa fa-history mr-1"></i> History of Claims</strong>
+
+                <p class="text-muted">
+                  No Claim history
+                </p>
+
+                <hr>
+
+                
+                <strong><i class="fa fa-map-marker mr-1"></i> Driving Experiance</strong>
+
+                <p class="text-muted">
+                  <span class="label label-success">Excellence<span>
+                </p>
+
+                <hr>
+
+                <strong><i class="fa fa-money mr-1"></i> No Claim Bonus</strong>
+
+                <p class="text-muted">7 years</p>
+
+                <hr>
+
+                <strong><i class="fa fa-medium mr-1"></i> Med Conditions</strong>
+
+                <p class="text-muted">
+                  <span class="label label-danger">Cataract</span>
+                <p class="text-muted">
+                </p>
+                  <span class="label label-info">Diabetes type-1</span>
+                <p class="text-muted">
+                <hr>
+
+                <span class="label label-success" onclick="purchase();">Buy Insurance<span>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -362,8 +416,127 @@
 </div>
 <!-- ./wrapper -->
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+<script type="text/babel">
+class Item extends React.Component {
+    render() {
+        return (
+          <li className= "treeview" >
+            <a href="#">
+              <i className='fa fa-dashboard'></i>
+              <span>{this.props.name}</span>
+            </a>
+          </li>
+        );
+    }
+}
+ReactDOM.render(
+      <div>
+        <li className="header">MAIN NAVIGATION</li>
+        <Item
+          active={'active'}
+          url={'#'}
+          icon={'fa fa-dashboard'}
+          name={'Index'}
+        >
+        </Item>
+        <Item
+          url={'#'}
+          icon={'fa fa-dashboard'}
+          name={'chat'}
+        >
+        </Item>
+        <Item
+          url={'#'}
+          icon={'fa fa-dashboard'}
+          name={'test'}
+        >
+        </Item>
+      </div>
+      ,
+      document.getElementById('navigation')
+    );
+</script>
+<script type="text/javascript">
+  function postUrl() {
+    let url = $('#urlInput').val();
+    postData(url);
+  }
 
-<script src="./AgoraRTCSDK-2.3.1.js"></script>
+  function postData(url) {
+    let postData = {
+      url : url
+    }
+    $.post("app_dev.php/api/add", postData, function(data) {
+      console.log(data);
+      getData();
+    });
+  }
+  function getData() {
+    $.get("app_dev.php/api/home", function(data) {
+      console.log(data);
+      addItems(data);
+    });
+  }
+  function removeAllChildren(node) {
+    while (node.hasChildNodes()) {
+        node.removeChild(node.lastChild);
+    }
+  }
+  function addItems(list = []) {
+    let parent = document.getElementById('listItems');
+    removeAllChildren(parent);
+    for(let a = 0; a < list.length; ++a) {
+      let item = list[a];
+      // URL Image
+      let url = 'https://store.storeimages.cdn-apple.com/4662/as-images.apple.com/is/image/AppleInc/aos/published/images/M/AC/MACBOOKPRO/MACBOOKPRO?wid=1879&hei=1061&fmt=jpeg&qlt=95&op_sharpen=0&resMode=bicub&op_usm=0.5,0.5,0,0&iccEmbed=0&layer=comp&.v=6xyk93';
+      if(a == 0) {
+        url = 'https://boygeniusreport.files.wordpress.com/2017/04/iphone-8-concept.jpg';
+      }
+      else if(a == 1) {
+        url = 'https://store.storeimages.cdn-apple.com/8750/as-images.apple.com/is/image/AppleInc/aos/published/images/m/bp/mbp13/gray/mbp13-gray-select-201610_GEO_TH?wid=452&hei=420&fmt=jpeg&qlt=95&op_sharpen=0&resMode=bicub&op_usm=0.5,0.5,0,0&iccEmbed=0&layer=comp&.v=1495927484878';
+      }
+      else;
+      parent.innerHTML += generateItem(
+      url
+      , item.name, item.cost, item.purchased_at, a+1);
+    }
+  }
+
+function addQuestionElement(questionText, shouldAddYesOrNo = false) {
+    let time = getTime();
+    let htmlText = '<li><i class="fa fa-question bg-orange color-palette"></i><div class="timeline-item">';
+      htmlText += '<span class="time"><i class="fa fa-clock-o"></i>' + time;
+      htmlText += '</span><div class="timeline-body">' + questionText;
+      htmlText += '</div>';
+      if(shouldAddYesOrNo) {
+        htmlText += '<div class="timeline-footer">';
+        htmlText += '<a class="btn btn-primary btn-xs" onclick="chatMain(' + "'Yes'" + ');">Yes</a>';
+        htmlText += '<a class="btn btn-danger btn-xs" onclick="chatMain(' + "'No'" + ');">No</a></div>';
+      }
+      htmlText += '</div></li>';
+    document.getElementById('chatBlog').innerHTML += htmlText;
+  }
+
+  function generateItem(url, itemName, value, date, id) {
+    let htmlText = '<div class="col-md-12"><div class="info-box"><span class="info-box-icon bg-aqua">';
+        htmlText += '<img style="position:relative;top:-5px;height:90px;object-fit:cover;" src="' + url + '"/>';
+        htmlText += '</span><div class="info-box-content"><div class="col-md-6"><span class="info-box-text">' + itemName + '</span>';
+        htmlText += '<span class="info-box-text">£' + value + '</span><span class="info-box-text">' + date + '</span>';
+        htmlText += '</div><div class="col-md-6"><input type="checkbox" name="travel"><span>Travel</span><br />';
+        htmlText += '<input type="checkbox" name="personal"><span>Personal Posessions</span><br />';
+        htmlText += '<button class="btn btn-success btn-xs" onclick="claimItem('+id+');">Claim</button>';
+        htmlText += '<span class="label label-success">verified</span></div></div></div></div>';
+    return htmlText;
+  }
+
+  function purchase() {
+    window.location.href = "/purchase.html";
+  }
+</script>
+
 <!-- jQuery 3 -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
@@ -395,5 +568,10 @@
 <script src="bower_components/fastclick/lib/fastclick.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
+<script type="text/javascript">
+  $( document ).ready(function() {
+    getData();
+  });
+</script>>
 </body>
 </html>

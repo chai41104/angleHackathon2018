@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>I-Click | Items</title>
+  <title>AdminLTE 2 | Timeline</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -17,14 +17,6 @@
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
-  <!-- jvectormap -->
-  <link rel="stylesheet" href="bower_components/jvectormap/jquery-jvectormap.css">
-  <!-- Date Picker -->
-  <link rel="stylesheet" href="bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="bower_components/bootstrap-daterangepicker/daterangepicker.css">
-  <!-- bootstrap wysihtml5 - text editor -->
-  <link rel="stylesheet" href="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -42,16 +34,19 @@
   <header class="main-header">
     <!-- Logo -->
     <a href="index2.html" class="logo">
-      <!-- mini logo for sidebar mini 50x50 pixels -->
+     <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini">IC</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg">I-Click</span>
+      <span class="logo-lg">I-Claim</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
       <!-- Sidebar toggle button-->
       <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
         <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
       </a>
 
       <div class="navbar-custom-menu">
@@ -59,13 +54,13 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="./dist/img/user4-128x128.jpg" class="user-image" alt="User Image">
-              <span class="hidden-xs">Alexander Pierce</span>
+              <img src="../../dist/img/user4-128x128.jpg" class="user-image" alt="User Image">
+              <span class="hidden-xs">Nina Mcintire</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="./dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
+                <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
 
                 <p>
                   Alexander Pierce - Web Developer
@@ -110,18 +105,19 @@
   <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
+      <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree" id="">
         <li class="active treeview">
-          <a href="/public.html">
+          <a href="#">
             <i class="fa fa-pie-chart"></i>
-            <span>Public</span>
+            <span>Index</span>
           </a>
         </li>
         <li class="treeview">
           <a href="#">
             <i class="fa fa-pie-chart"></i>
-            <span>Watch</span>
+            <span>Chat</span>
           </a>
         </li>
       </ul>
@@ -133,46 +129,45 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
+      <h1>
+        New Journey
+        <small>Craete a new journey with ease</small>
+      </h1>
     </section>
 
     <!-- Main content -->
     <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="box box-info">
-                <div class="box-header">
-                  <h3 class="box-title">We are I-Click</h3>
-                </div>
-                <div class="box-body">
-                <!-- Profile Image -->
-                <div class="card card-primary card-outline">
-                  <div class="card-body box-profile">
-                    <div class="text-center">
-                      <img class="profile-user-img"
-                          src="./dist/img/i-click.PNG"
-                          alt="User profile picture">
-                    </div>
-                  </div>
-                  <!-- /.card-body -->
-                </div>
-                </div>
-              <!-- /.card -->
-              </div>
-            </div>
+
+      <!-- row -->
+      <div class="row">
+        <div class="col-md-12">
+          <!-- The time line -->
+          <ul class="timeline" id="chatBlog">
+            <!-- timeline time label -->
+            <li class="time-label">
+                  <span class="bg-red">
+                    23 Jun. 2018
+                  </span>
+            </li>
+            <!-- /.timeline-label -->
+            <!-- timeline item -->
+            
+          </ul>
         </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
     </section>
     <!-- /.content -->
-
   </div>
-
+  <!-- /.content-wrapper -->
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
     <!-- Create the tabs -->
     <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
       <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+
       <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
     </ul>
     <!-- Tab panes -->
@@ -198,6 +193,7 @@
 
               <div class="menu-info">
                 <h4 class="control-sidebar-subheading">Frodo Updated His Profile</h4>
+
                 <p>New phone +1(800)555-1234</p>
               </div>
             </a>
@@ -307,6 +303,7 @@
               Allow mail redirect
               <input type="checkbox" class="pull-right" checked>
             </label>
+
             <p>
               Other sets of options are available
             </p>
@@ -362,38 +359,176 @@
 </div>
 <!-- ./wrapper -->
 
+<script>
+  let state = 1;
+  let information = {};
 
-<script src="./AgoraRTCSDK-2.3.1.js"></script>
+  Element.prototype.remove = function() {
+    this.parentElement.removeChild(this);
+  }
+
+  NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
+      for(var i = this.length - 1; i >= 0; i--) {
+          if(this[i] && this[i].parentElement) {
+              this[i].parentElement.removeChild(this[i]);
+          }
+      }
+  }
+
+  function chatMain(responseText = null) {
+
+    responseText = responseText ? responseText : 
+      (document.getElementById('inputText') ? document.getElementById('inputText').value : "");
+    removeInput();
+    if (responseText !== "") {
+      addResponseElement(responseText);
+    }
+    
+    if(state == 1) {
+      information['policeReport'] = responseText;
+      addQuestionElement('Are you sharing this ride with others?', {shouldAddYesOrNo: true});
+    }
+    else if(state == 2) {
+      information['reportNumber'] = responseText;
+      addQuestionElement(`
+            <h2>Did you know?</h2>
+            <p>Driving responsibly will result in a lower insurance premium. examples include:<p>
+            <ul>
+              <li>Driving within speed limits</li>
+              <li>Avoiding unsafe roads and areas</li>
+            </ul>`,
+            {
+              shouldAddYesOrNo: true,
+              labels: ["Thanks, I'll keep that in mind"],
+              responses: [""]
+            });
+
+    }
+    else if(state == 3) {
+      information['yourLoss'] = responseText;
+      addQuestionElement(`<p>Price estimate: <b>£ 8 - 12</b></p>`, 
+            {
+              shouldAddYesOrNo: true,
+              labels: ["Finalize order"],
+              responses: [""]
+            });
+
+      // addResponseElement('Thank you for your submition. <br /> Your claim is in the process now. <br /> We will contact you once the process done.');
+      // addResponseElement('The claim record has been sent to your register email.');
+    }
+    else if (state == 4) {
+      addQuestionElement(`
+            <h2>Did you know?</h2>
+            <p>You cloud get an insurance discount if you allow us access to measure your score from your CCTV camera.</p>`,
+            {
+              shouldAddYesOrNo: true,
+              labels: ["Allow access to CCTV", "No thanks"],
+              responses: ["Allow CCTV is in Operated!!!", "deny"]
+            });
+    }
+    else if (state == 5) {
+      information["your_order"] = responseText
+      addQuestionElement(`
+        <h3>Congrats</h3>
+        <p>Insurance is complete!</p>
+        `, {})
+    }
+
+    // addInputElement();
+    state++;
+  }
+
+  function addInputElement() {
+    let htmlText = '<li id="listInput"><i class="fa fa-reply bg-aqua"></i><div class="timeline-item">';
+        htmlText += '<div class="input-group input-group-sm"><input id="inputText" placeholder="Type your answer..." type="input" onkeypress="userInput(event); "class="form-control">';
+        htmlText += '<span class="input-group-btn"><button id="icon1" onclick="recorder(1);" type="button" class="btn btn-info btn-flat">';
+        htmlText += '<i class="fa fa-camera" aria-hidden="true"></i></button><button id="icon2" onclick="recorder(2);" type="button" class="btn btn-info btn-flat">';
+        htmlText += '<i class="fa fa-microphone" aria-hidden="true"></i></button><button type="button" class="btn btn-success btn-flat" onclick="chatMain();">Send</button></span></div></div></li>';
+    document.getElementById('chatBlog').innerHTML += htmlText;
+  }
+
+  function addResponseElement(responseText) {
+    let time = getTime();
+    let htmlText = '<li><i class="fa fa-chevron-right bg-green color-palette"></i><div class="timeline-item">';
+        htmlText += '<span class="time"><i class="fa fa-clock-o"></i>' + time;
+        htmlText += '</span><div class="timeline-body">' + responseText;
+        htmlText += '</div></div></li>';
+    document.getElementById('chatBlog').innerHTML += htmlText;
+  }
+
+  function addQuestionElement(questionText, options={}) {
+
+    let shouldAddYesOrNo = options.shouldAddYesOrNo || false
+    let labels = options.labels || ["Yes", "No"]
+    let responses = options.responses || ["yes", "no"]
+
+    let time = getTime();
+    let htmlText = '<li><i class="fa fa-question bg-orange color-palette"></i><div class="timeline-item">';
+      htmlText += '<span class="time"><i class="fa fa-clock-o"></i>' + time;
+      htmlText += '</span><div class="timeline-body">' + questionText;
+      htmlText += '</div>';
+      if(shouldAddYesOrNo) {
+        htmlText += '<div class="timeline-footer">';
+        htmlText += '<a class="btn btn-primary btn-xs" onclick="chatMain(' + "'"+responses[0]+"'" + ');">'+labels[0]+'</a>';
+        if (labels.length > 1) {
+          htmlText += '<a class="btn btn-danger btn-xs" onclick="chatMain(' + "'"+responses[1]+"'" + ');">'+labels[1]+'</a></div>';         
+        }
+      }
+      htmlText += '</div></li>';
+    document.getElementById('chatBlog').innerHTML += htmlText;
+  }
+
+  function userInput(e) {
+      if (e.keyCode == 13) {
+        chatMain();
+      }
+  }
+
+  function getTime() {
+    var d = new Date();
+    var text = d.getHours() + ':' + d.getMinutes();
+    return text;
+  }
+
+  function removeInput() {
+    if(document.getElementById("listInput")) document.getElementById("listInput").remove();
+  }
+
+  function recorder(id){
+    // camera
+    if(id == 1) {
+      document.getElementById("icon1").classList.remove('btn-info');
+      document.getElementById("icon1").classList.add('btn-danger');
+      document.getElementById("icon2").classList.add('btn-info');
+      document.getElementById("icon2").classList.remove('btn-danger');
+    }
+    // microphone
+    else if(id == 2) {
+      document.getElementById("icon2").classList.remove('btn-info');
+      document.getElementById("icon2").classList.add('btn-danger');
+      document.getElementById("icon1").classList.add('btn-info');
+      document.getElementById("icon1").classList.remove('btn-danger');
+    }
+  }
+
+  addQuestionElement('Congragulations on your new Zipcar rental! <br /> ' + 
+                        'You are going to <b>Euston square</b> <br> (data pulled in from zipcar)', {
+                          shouldAddYesOrNo: true, 
+                          labels: ["Purchase an on-demand insurance", "I don't want an insurance"],
+                          responses: ["Purchase an insurance", "Dont purchase insurance"]
+                        });
+
+</script>
+
 <!-- jQuery 3 -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-  $.widget.bridge('uibutton', $.ui.button);
-</script>
 <!-- Bootstrap 3.3.7 -->
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="bower_components/raphael/raphael.min.js"></script>
-<!-- Sparkline -->
-<script src="bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
-<!-- jvectormap -->
-<script src="plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-<!-- jQuery Knob Chart -->
-<script src="bower_components/jquery-knob/dist/jquery.knob.min.js"></script>
-<!-- daterangepicker -->
-<script src="bower_components/moment/min/moment.min.js"></script>
-<script src="bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
-<!-- datepicker -->
-<script src="bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-<!-- Bootstrap WYSIHTML5 -->
-<script src="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
-<!-- Slimscroll -->
-<script src="bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->
 <script src="bower_components/fastclick/lib/fastclick.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
 </body>
 </html>
