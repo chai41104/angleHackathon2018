@@ -591,9 +591,17 @@ const startAlert = () => {
     }, 1000);
 };
 
+document.addEventListener('keypress', (event) => {
+    const keyName = event.key;
+    console.log(event);
+    if(keyName==='s' || keyName==='S') {
+        startAlert();
+    }
+});
+
 $(document).ready(function(){ 
     startVideo();
-    setTimeout(function(){ startAlert(); }, 60000);
+    // setTimeout(function(){ startAlert(); }, 60000);
 }) 
 </script>>
 </body>
