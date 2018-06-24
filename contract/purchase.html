@@ -3,20 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 2 | Timeline</title>
+  <title>I-Click | </title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
-  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css">
   <!-- Ionicons -->
-  <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.min.css">
+  <link rel="stylesheet" href="../bower_components/Ionicons/css/ionicons.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="../dist/css/skins/_all-skins.min.css">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -55,7 +55,7 @@
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img src="../../dist/img/user4-128x128.jpg" class="user-image" alt="User Image">
-              <span class="hidden-xs">Nina Mcintire</span>
+              <span class="hidden-xs">Alexander Pierce</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
@@ -359,6 +359,12 @@
 </div>
 <!-- ./wrapper -->
 
+<!-- If you don't want to use metamask you can use a local node and web3.js metamask will inject web3 for you so you don't need to do this: <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.min.js" charset="utf-8"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.5.0/bluebird.min.js" charset="utf-8"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
 <script>
   let state = 1;
   let information = {};
@@ -405,25 +411,35 @@
 
     }
     else if(state == 3) {
-      information['yourLoss'] = responseText;
-      addQuestionElement(`<p>Price estimate: <b>£ 8 - 12</b></p>`, 
+      addQuestionElement(`
+            <h2>Did you know?</h2>
+            <p>You cloud get an insurance discount if you allow us access to measure your preformance score from your CCTV camera.</p>`,
             {
               shouldAddYesOrNo: true,
-              labels: ["Finalize order"],
-              responses: [""]
+              labels: ["Allow access to CCTV", "No thanks"],
+              responses: ["Allow CCTV", "deny"]
             });
-
       // addResponseElement('Thank you for your submition. <br /> Your claim is in the process now. <br /> We will contact you once the process done.');
       // addResponseElement('The claim record has been sent to your register email.');
     }
     else if (state == 4) {
+      information['yourLoss'] = responseText;
       addQuestionElement(`
-            <h2>Did you know?</h2>
-            <p>You cloud get an insurance discount if you allow us access to measure your score from your CCTV camera.</p>`,
+        <ul>
+          <li>Age: 24</li>
+          <li><b>Driver score:</b> 3.5</li>
+          <li><b>Allowed CCTV:</b> Yes</li>
+          <li><b>Shared ride?</b> Yes</li>
+        </ul>
+        <p>Price estimate: <b>£ 8 - 12</b></p>
+
+        <p>If you drive safely during this journey you could earn: <b>£6</b></p>
+        <button onclick="makeJourney(4, 'euston', 8, 9)">submit</button>
+        `, 
             {
-              shouldAddYesOrNo: true,
-              labels: ["Allow access to CCTV", "No thanks"],
-              responses: ["Allow CCTV is in Operated!!!", "deny"]
+              shouldAddYesOrNo: false,
+              labels: ["Finalize order"],
+              responses: [""]
             });
     }
     else if (state == 5) {
@@ -511,24 +527,224 @@
     }
   }
 
-  addQuestionElement('Congragulations on your new Zipcar rental! <br /> ' + 
-                        'You are going to <b>Euston square</b> <br> (data pulled in from zipcar)', {
+  addQuestionElement('Congragulations on your new Uber rental! <br /> ' + 
+                        'You are going to <b>Euston square</b> <br> (data pulled in from uber)', {
                           shouldAddYesOrNo: true, 
                           labels: ["Purchase an on-demand insurance", "I don't want an insurance"],
                           responses: ["Purchase an insurance", "Dont purchase insurance"]
                         });
 
+
+  // ===== SMART CONTRACT ==== //
+
+      var d = document
+      var c = console
+      var g = window // global scope shortcut
+      g.abi = null
+      g.abi = null
+      g.contractAddress = "0xd25ed029c093e56bc8911a07c46545000cbf37c6"
+      // g.contract = null
+
+      var main = async function() {
+        // setup web3
+        if (typeof web3 !== 'undefined') {
+          // connect to metamask (preferred)
+          g.web3 = new Web3(web3.currentProvider)
+        } else {
+          // connect to your local geth or parity node instead
+          g.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"))
+        }
+        g.eth = g.web3.eth
+
+        // setup functions to be called via await (simpler than using callbacks)
+        var getCoinbase = Promise.promisify(g.eth.getCoinbase)
+        g.getBalance    = Promise.promisify(g.eth.getBalance)
+
+        // get your first ethereum address (coinbase address)
+        g.coinbase = await getCoinbase()
+
+        // token contract class
+        g.insuraceContract = g.eth.contract(g.abi)
+        g.insurance = insuraceContract.at(contractAddress)
+        // g.ProjectsContract = ProjectsContract
+
+        // token contract instance
+        // if (localStorage.ftw_db_address) {
+        //   g.ProjectsContract = ProjectsContract.at(localStorage.ftw_db_address)
+        // }
+
+      }
+
+      window.addEventListener('load', main)
+
+      function makeJourney(nPassengers, destination, amount, reward) {
+        console.log(g.insurance)
+
+        var send = g.web3.eth.sendTransaction({from:g.eth.coinbase,to:contractAddress, value:g.web3.toWei(0.03, "ether")}, function(){});
+
+        // (async function() {
+        //   var xx = Promise.promisify(g.insurance.getNjourneys)
+        //   var vv = await(xx)
+        //   console.log(g.web3.toDecimal(vv))     
+        // })()
+
+        g.insurance.makeJourney(nPassengers, destination, amount, reward, {gas: 3000000}, function() {
+          alert('journey successful!')
+          g.insurance.getJourney.call(0,function(_, a){console.log(_,a)} )
+        })
+      } 
+
+      // long (but important) variables are defined here (contract bytecode and contract ABI):
+
+      // bytecode is the contrect compiled in binary format, needed to "deploy" (publish) the contract to the ethereum network
+      // abi is the application binary interface, it tells your web3.js library which are the function names and its arguments to be able to call them.
+
+
+g.abi = [
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "i",
+        "type": "uint8"
+      }
+    ],
+    "name": "claimAmont",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "i",
+        "type": "uint8"
+      }
+    ],
+    "name": "getJourney",
+    "outputs": [
+      {
+        "name": "nPassengers",
+        "type": "uint8"
+      },
+      {
+        "name": "destination",
+        "type": "string"
+      },
+      {
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "name": "reward",
+        "type": "uint256"
+      },
+      {
+        "name": "status",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "getNjourneys",
+    "outputs": [
+      {
+        "name": "nPassengers",
+        "type": "uint8"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "nPassengers",
+        "type": "uint8"
+      },
+      {
+        "name": "destination",
+        "type": "string"
+      },
+      {
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "name": "reward",
+        "type": "uint256"
+      }
+    ],
+    "name": "makeJourney",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "i",
+        "type": "uint8"
+      }
+    ],
+    "name": "makeJourneySuccessful",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "journeyCount",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
+// g.insurance = insuraceContract.new(
+//    {
+//      from: web3.eth.accounts[0], 
+//      data: '0x6080604052730c02c25fb944d9563d8f50d364a8ed22043111276000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060008060146101000a81548160ff021916908360ff16021790555034801561007f57600080fd5b506107718061008f6000396000f30060806040526004361061006d576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063031c45d2146100725780634d399021146100fc5780637dff37881461012c5780637f83b80b1461025c578063e7dd62111461028c575b600080fd5b34801561007e57600080fd5b506100fa600480360381019080803560ff169060200190929190803590602001908201803590602001908080601f016020809104026020016040519081016040528093929190818152602001838380828437820191505050505050919291929080359060200190929190803590602001909291905050506102bd565b005b34801561010857600080fd5b5061012a600480360381019080803560ff1690602001909291905050506103fa565b005b34801561013857600080fd5b5061015a600480360381019080803560ff16906020019092919050505061048b565b604051808660ff1660ff1681526020018060200185815260200184815260200180602001838103835287818151815260200191508051906020019080838360005b838110156101b657808201518184015260208101905061019b565b50505050905090810190601f1680156101e35780820380516001836020036101000a031916815260200191505b50838103825284818151815260200191508051906020019080838360005b8381101561021c578082015181840152602081019050610201565b50505050905090810190601f1680156102495780820380516001836020036101000a031916815260200191505b5097505050505050505060405180910390f35b34801561026857600080fd5b5061028a600480360381019080803560ff169060200190929190505050610621565b005b34801561029857600080fd5b506102a161068a565b604051808260ff1660ff16815260200191505060405180910390f35b6000600160008060149054906101000a900460ff1660ff1660ff1681526020019081526020016000209050848160000160006101000a81548160ff021916908360ff1602179055508381600101908051906020019061031d9291906106a0565b508281600201819055508181600301819055506040805190810160405280600781526020017f70656e64696e670000000000000000000000000000000000000000000000000081525081600401908051906020019061037d9291906106a0565b50338160050160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506000601481819054906101000a900460ff168092919060010191906101000a81548160ff021916908360ff160217905550505050505050565b600160008260ff1660ff16815260200190815260200160002060050160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166108fc600160008460ff1660ff168152602001908152602001600020600201549081150290604051600060405180830381858888f193505050505050565b6000606060008060606000600160008860ff1660ff16815260200190815260200160002090508060000160009054906101000a900460ff16816001018260020154836003015484600401838054600181600116156101000203166002900480601f01602080910402602001604051908101604052809291908181526020018280546001816001161561010002031660029004801561056a5780601f1061053f5761010080835404028352916020019161056a565b820191906000526020600020905b81548152906001019060200180831161054d57829003601f168201915b50505050509350808054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156106065780601f106105db57610100808354040283529160200191610606565b820191906000526020600020905b8154815290600101906020018083116105e957829003601f168201915b50505050509050955095509550955095505091939590929450565b6040805190810160405280600a81526020017f7375636365737366756c00000000000000000000000000000000000000000000815250600160008360ff1660ff16815260200190815260200160002060040190805190602001906106869291906106a0565b5050565b60008060149054906101000a900460ff16905090565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f106106e157805160ff191683800117855561070f565b8280016001018555821561070f579182015b8281111561070e5782518255916020019190600101906106f3565b5b50905061071c9190610720565b5090565b61074291905b8082111561073e576000816000905550600101610726565b5090565b905600a165627a7a72305820d8ebeea9cd1cfac750fc8e500debbdeeafc580c12fea767df5900c3912f1c5560029', 
+//      gas: '4700000'
+//    }, function (e, contract){
+//     console.log(e, contract);
+//     if (typeof contract.address !== 'undefined') {
+//          console.log('Contract mined! address: ' + contract.address + ' transactionHash: ' + contract.transactionHash);
+//     }
+//  })
+
+
+
+
 </script>
 
 <!-- jQuery 3 -->
-<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
-<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- FastClick -->
-<script src="bower_components/fastclick/lib/fastclick.js"></script>
+<script src="../bower_components/fastclick/lib/fastclick.js"></script>
 <!-- AdminLTE App -->
-<script src="dist/js/adminlte.min.js"></script>
+<script src="../dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="dist/js/demo.js"></script>
+<script src="../dist/js/demo.js"></script>
 </body>
 </html>
