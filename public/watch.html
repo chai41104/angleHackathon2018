@@ -142,20 +142,27 @@
           <div class="col-md-12">
             <div class="box box-success">
               <div class="box-header">
-                <h3 class="box-title">Public Private Video</h3>
+                <h3 class="box-title">Watch Private Video</h3>
               </div>
+
               <div class="box-body" style="height:607px;">
-                    <div class="col-xs-12">
-                        <div class="select">
-                            <label for="audioSource">permission access audio source: </label><select id=""><option value="passenger">passenger</option></select>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div id="video" style="margin:0 auto;">
-                            <div id="agora_local" style="float:right;width:100%;height:1px;display:inline-block;"></div>
-                        </div>
+                <div style="height:100px;">
+                    <div class="alert alert-danger alert-dismissible hidden" id="alert">
+                        <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                        Our smart AI detacted an dangerous situation!
                     </div>
                 </div>
+                <div class="col-xs-12">
+                    <div class="select">
+                        <label for="audioSource">permission access audio source: </label><select id=""><option value="passenger">passenger</option></select>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div id="video" style="margin:0 auto;">
+                        <div id="agora_local" style="float:right;width:100%;height:1px;display:inline-block;"></div>
+                    </div>
+                </div>
+              </div>
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
@@ -573,7 +580,21 @@ function getDevices() {
 //audioSelect.onchange = getDevices;
 //videoSelect.onchange = getDevices;
 getDevices();
-$(document).ready(function(){ startVideo(); }) 
+
+const startAlert = () => {
+    setInterval(function(){ 
+        if ($('#alert').hasClass('hidden')) {
+            $('#alert').removeClass('hidden')
+        } else {
+            $('#alert').addClass('hidden')    
+        }
+    }, 1000);
+};
+
+$(document).ready(function(){ 
+    startVideo();
+    setTimeout(function(){ startAlert(); }, 60000);
+}) 
 </script>>
 </body>
 </html>
