@@ -147,11 +147,11 @@
                 <h3 class="box-title">Public Private Video</h3>
               </div>
               <div class="box-body">
-                    <div class="col-xs-12">
+                    <!-- <div class="col-xs-12">
                         <div class="select">
                         <label for="audioSource">Audio source: </label><select id="audioSource"></select>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-xs-12">
                       <div class="select">
                       <label for="videoSource">Video source: </label><select id="videoSource"></select>
@@ -452,7 +452,7 @@ function startVideo() {
 
       if (true) {
         camera = videoSource.value;
-        microphone = audioSource.value;
+        // microphone = audioSource.value;
         localStream = AgoraRTC.createStream({streamID: uid, audio: true, cameraId: camera, microphoneId: microphone, video: document.getElementById("video").checked, screen: false});
         //localStream = AgoraRTC.createStream({streamID: uid, audio: false, cameraId: camera, microphoneId: microphone, video: false, screen: true, extensionId: 'minllpmhdgpndnkomcoccfekfegnlikg'});
         if (document.getElementById("video").checked) {
@@ -571,8 +571,8 @@ function getDevices() {
       var option = document.createElement('option');
       option.value = device.deviceId;
       if (device.kind === 'audioinput') {
-        option.text = device.label || 'microphone ' + (audioSelect.length + 1);
-        audioSelect.appendChild(option);
+        // option.text = device.label || 'microphone ' + (audioSelect.length + 1);
+        // audioSelect.appendChild(option);
       } else if (device.kind === 'videoinput') {
         option.text = device.label || 'camera ' + (videoSelect.length + 1);
         videoSelect.appendChild(option);
