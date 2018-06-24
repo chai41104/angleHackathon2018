@@ -404,10 +404,10 @@ if(!AgoraRTC.checkSystemRequirements()) {
 // AgoraRTC.Logger.setLogLevel(AgoraRTC.Logger.DEBUG);
 
 /* simulated data to proof setLogLevel() */
-AgoraRTC.Logger.error('this is error');
-AgoraRTC.Logger.warning('this is warning');
-AgoraRTC.Logger.info('this is info');
-AgoraRTC.Logger.debug('this is debug');
+// AgoraRTC.Logger.error('this is error');
+// AgoraRTC.Logger.warning('this is warning');
+// AgoraRTC.Logger.info('this is info');
+// AgoraRTC.Logger.debug('this is debug');
 
 var client, localStream, camera, microphone;
 
@@ -418,13 +418,12 @@ const key = {};
 const channel = {};
 
 function startVideo() {
-  document.getElementById("join").disabled = true;
   document.getElementById("video").disabled = true;
   var channel_key = null;
 
   // Hard Code: AppId
   key.value = '575be5fb39fe485f9d8c534a2ca7eb5d';
-  channel.value = 1000;
+  channel.value = '1000';
 
   console.log("Init AgoraRTC client with vendor key: " + key.value);
   client = AgoraRTC.createClient({mode: 'interop'});

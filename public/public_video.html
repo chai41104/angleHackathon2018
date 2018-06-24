@@ -37,6 +37,14 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
+    <div id="div_device" class="panel panel-default">
+        <div class="select">
+        <label for="audioSource">Audio source: </label><select id="audioSource"></select>
+        </div>
+        <div class="select">
+        <label for="videoSource">Video source: </label><select id="videoSource"></select>
+        </div>
+        </div>
 <div class="wrapper">
 
   <header class="main-header">
@@ -410,10 +418,10 @@ if(!AgoraRTC.checkSystemRequirements()) {
 // AgoraRTC.Logger.setLogLevel(AgoraRTC.Logger.DEBUG);
 
 /* simulated data to proof setLogLevel() */
-AgoraRTC.Logger.error('this is error');
-AgoraRTC.Logger.warning('this is warning');
-AgoraRTC.Logger.info('this is info');
-AgoraRTC.Logger.debug('this is debug');
+// AgoraRTC.Logger.error('this is error');
+// AgoraRTC.Logger.warning('this is warning');
+// AgoraRTC.Logger.info('this is info');
+// AgoraRTC.Logger.debug('this is debug');
 
 var client, localStream, camera, microphone;
 
@@ -430,13 +438,14 @@ function startVideo() {
 
   // Hard Code: AppId
   key.value = '575be5fb39fe485f9d8c534a2ca7eb5d';
-  channel.value = 1000;
+  channel.value = '1000';
 
   console.log("Init AgoraRTC client with vendor key: " + key.value);
   client = AgoraRTC.createClient({mode: 'interop'});
   client.init(key.value, function () {
     console.log("AgoraRTC client initialized");
     client.join(channel_key, channel.value, null, function(uid) {
+
       console.log("User " + uid + " join channel successfully");
 
       if (document.getElementById("video").checked) {
