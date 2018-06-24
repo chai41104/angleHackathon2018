@@ -6,6 +6,7 @@
   <title>I-Click | Items</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <script src="./AgoraRTCSDK-2.3.1.js"></script>
   <!-- Bootstrap 3.3.7 -->
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   <!-- Font Awesome -->
@@ -37,14 +38,6 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-    <div id="div_device" class="panel panel-default">
-        <div class="select">
-        <label for="audioSource">Audio source: </label><select id="audioSource"></select>
-        </div>
-        <div class="select">
-        <label for="videoSource">Video source: </label><select id="videoSource"></select>
-        </div>
-        </div>
 <div class="wrapper">
 
   <header class="main-header">
@@ -159,6 +152,17 @@
                         <button onclick="startVideo();" id="join" type="button" class="btn btn-block btn-success btn-lg">Start Video</button>
                     </div>
                     <div class="col-md-5">
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="select">
+                        <label for="audioSource">Audio source: </label><select id="audioSource"></select>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                      <div class="select">
+                      <label for="videoSource">Video source: </label><select id="videoSource"></select>
+                      </div>
+                      </div>
                     </div>
                     <div class="col-md-12">
                         <div id="video" style="margin:0 auto;">
@@ -372,8 +376,6 @@
 </div>
 <!-- ./wrapper -->
 
-
-<script src="./AgoraRTCSDK-2.3.1.js"></script>
 <!-- jQuery 3 -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
@@ -448,7 +450,7 @@ function startVideo() {
 
       console.log("User " + uid + " join channel successfully");
 
-      if (document.getElementById("video").checked) {
+      if (true) {
         camera = videoSource.value;
         microphone = audioSource.value;
         localStream = AgoraRTC.createStream({streamID: uid, audio: true, cameraId: camera, microphoneId: microphone, video: document.getElementById("video").checked, screen: false});
@@ -512,28 +514,28 @@ function startVideo() {
   });
 
   client.on('stream-subscribed', function (evt) {
-    // var stream = evt.stream;
-    // console.log("Subscribe remote stream successfully: " + stream.getId());
-    // if ($('div#video #agora_remote'+stream.getId()).length === 0) {
-    //   $('div#video').append('<div id="agora_remote'+stream.getId()+'" style="float:left; width:810px;height:607px;display:inline-block;"></div>');
-    // }
-    // stream.play('agora_remote' + stream.getId());
+    var stream = evt.stream;
+    console.log("Subscribe remote stream successfully: " + stream.getId());
+    if ($('div#video #agora_remote'+stream.getId()).length === 0) {
+      $('div#video').append('<div id="agora_remote'+stream.getId()+'" style="float:left; width:810px;height:607px;display:inline-block;"></div>');
+    }
+    stream.play('agora_remote' + stream.getId());
   });
 
   client.on('stream-removed', function (evt) {
-    // var stream = evt.stream;
-    // stream.stop();
-    // $('#agora_remote' + stream.getId()).remove();
-    // console.log("Remote stream is removed " + stream.getId());
+    var stream = evt.stream;
+    stream.stop();
+    $('#agora_remote' + stream.getId()).remove();
+    console.log("Remote stream is removed " + stream.getId());
   });
 
   client.on('peer-leave', function (evt) {
-    // var stream = evt.stream;
-    // if (stream) {
-    //   stream.stop();
-    //   $('#agora_remote' + stream.getId()).remove();
-    //   console.log(evt.uid + " leaved from this channel");
-    // }
+    var stream = evt.stream;
+    if (stream) {
+      stream.stop();
+      $('#agora_remote' + stream.getId()).remove();
+      console.log(evt.uid + " leaved from this channel");
+    }
   });
 }
 
